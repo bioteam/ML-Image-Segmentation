@@ -1,0 +1,31 @@
+[{
+"id": "9559b6c9-6c24-457e-ada7-98a5c3b14fe9",
+"color": "#1f78b44d",
+"png_index": [
+31,
+120,
+180
+],
+"name": "Vitreous",
+"type": "background"
+}, {
+"id": "24e4c900-386e-4621-820b-3ab62af1d83c",
+"color": "#e31a1c4d",
+"png_index": [
+227,
+26,
+28
+],
+"name": "Retina",
+"type": "background"
+}, {
+"id": "40fd6c55-369c-4ff6-9717-db7fa697b9e2",
+"color": "#6a3d9a4d",
+"png_index": [
+106,
+61,
+154
+],
+"name": "Choroid",
+"type": "background"
+}]
