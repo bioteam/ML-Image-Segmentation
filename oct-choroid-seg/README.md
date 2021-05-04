@@ -5,13 +5,41 @@ Link: https://www.nature.com/articles/s41598-019-49816-4
 
 If the code and methods here are useful to you and aided in your research, please consider citing the paper.
 
-# Dependencies
+# Dependencies 
 * Python 3.6.4
 * Keras 2.4.3
 * tensorflow 2.3.1
 * h5py
 * Matplotlib
 * numpy
+
+# BioTeam Github Guidance
+## Create hdf5 file 
+
+1. Directory `data` is used in dataset_construction.py to build a hdf5 file
+2. Create `data` directory at same level of .git 
+3. Add `data` to .gitignore
+4. Add the `data` path to DATA_LOCATION parameter in file `parameters.py`
+
+## Run with example_data.hdf5
+
+For a quick test use epochs = 1000 in train_script_semantic_general.py instead of 10000
+
+1. Create `results` directory at same level of .git  
+2. Add `results` to .gitignore
+3. Add the path to file `parameters.py`
+4. Install a conda environment with
+
+`conda env create --name ml_env --file environment.yml`
+
+5. Activate the conda environment with `conda activate ml_env` and run 
+
+`python train_script_semantic_general.py`
+
+## Observations during training
+* As it runs, notice the dice_coef (Dice Coefficient) getting larger as tensorflow converges on a better model
+* A directory `__pycache__` is added to the main directory during training
+
 
 # Training a model (patch-based)
 1. Modify *load_training_data* and *load_validation_data* functions in *train_script_patchbased_general.py* to load your training and validation data (see comments in code). [see example data file and load functions]
