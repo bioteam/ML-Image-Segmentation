@@ -21,7 +21,7 @@ If the code and methods here are useful to you and aided in your research, pleas
 3. Add the `data` path to DATA_LOCATION parameter in file `parameters.py`
 
 ## Inspect example_data.hdf5
-Extract imges and segmentaiton files from example_data.hdf5 with:
+Extract images and segmentation files from example_data.hdf5 with:
 `python hdf52images.py`
 
 ## Run with example_data.hdf5
@@ -43,8 +43,7 @@ For a quick test use `epochs = 100` in train_script_semantic_general.py instead 
 
 ## What to expect
 * During training, the dice_coef (Dice Coefficient) increases as tensorflow converges on a better model
-* A directory `__pycache__` is added to the main directory during training
-* The results directory has one `config.hdf5` and several hdf5 files asigned to  an `epoch` number 
+* The results directory has one `config.hdf5` file and several hdf5 files asigned to  an `epoch` number 
 * To read one hdf5 file from the `results` directory, run `hdf5scan.py`
 
 
