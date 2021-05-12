@@ -28,23 +28,26 @@ def main(argv):
 	# Example: Run with 'python hdf5scan.py -i model_epoch858.hdf5 -o hdf5-scan.txt'
 	try:
 		opts, args = getopt.getopt(argv,"hi:o:",["ifile=","ofile="])
-	except getopt.GetoptError:
+
+		for opt, arg in opts:
+			if opt == '-h':
+				print('hdf5scan.py -i <inputfile> -o <outputfile>')
+				sys.exit()
+			elif opt in ("-i", "--ifile"):
+				infile = arg
+			elif opt in ("-o", "--ofile"):
+				outfile = arg
+	except getopt.GetoptError as e:
 		print('hdf5scan.py -i <inputfile> -o <outputfile>')
 		sys.exit(2)
-	for opt, arg in opts:
-		if opt == '-h':
-			print('hdf5scan.py -i <inputfile> -o <outputfile>')
-			sys.exit()
-		elif opt in ("-i", "--ifile"):
-			infile = arg
-		elif opt in ("-o", "--ofile"):
-			outfile = arg
-
+	if infile == '' or outfile == '':
+		print('hdf5scan.py -i <inputfile> -o <outputfile>')
+		sys.exit(2)
 
 	# write hdf5 contents to file
 	elems=scan_hdf52(infile,True,2)
-	segformat= 'hdf5-format.txt'
-	ffile = open(segformat, "w+")
+
+	ffile = open(outfile, "w+")
 
 	for e in elems:
 		content = str(e)+str("\n")
