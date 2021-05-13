@@ -1,96 +1,90 @@
-import sys, getopt
+import sys
+import os
+import getopt
 import imageio
-import matplotlib.pyplot as plt
-import matplotlib.image
 import numpy as np
 import h5py
 
+
 def main(argv):
-    infile = ''
-    outfile = ''
-    # Example: Run with 'python hdf5readimages.py -i example_data.hdf5 -o hdf5-format.txt'
+    infile = ""
+    outpath = ""
+    # Example: 'python hdf5readimages.py -i example_data.hdf5 -o /Users/xyz/data/
     try:
-        opts, args = getopt.getopt(argv,"hi:o:",["ifile=","ofile="])
+        opts, args = getopt.getopt(argv, "hi:o:", ["ifile=", "opath="])
 
         for opt, arg in opts:
-            if opt == '-h':
-                print('hdf5readimages.py -i <inputfile> -o <outputfile>')
+            if opt == "-h":
+                print("hdf5readimages.py -i <inputfile> -o <outputpath>")
                 sys.exit()
             elif opt in ("-i", "--ifile"):
                 infile = arg
-            elif opt in ("-o", "--ofile"):
-                outfile = arg
-    except getopt.GetoptError as e:
-        print('hdf5readimages.py -i <inputfile> -o <outputfile>')
+            elif opt in ("-o", "--opah"):
+                outpath = arg
+    except getopt.GetoptError:
+        print("hdf5readimages.py -i <inputfile> -o <outputpath>")
         sys.exit(2)
-    if infile == '' or outfile == '':
-        print('hdf5readimages.py -i <inputfile> -o <outputfile>')
+    if infile == "" or outpath == "":
+        print("hdf5readimages.py -i <inputfile> -o <outputpath>")
         sys.exit(2)
-        
-    f = h5py.File(infile)
-    
-    
-    #Extract keyes
+
+    f = h5py.File(infile, "r")
+
+    # Extract keyes
 
     keys = list(f.keys())
-    print(keys)
 
+    outfile = os.path.join(outpath, "hdf5imginfo.txt")
     ffile = open(outfile, "w+")
-
 
     for k in keys:
         print(k)
-        ffile.write(k+"\n")
-        kname=str(k)
-        imgstr='images'
-        segstr='segs'
+        ffile.write(k + "\n")
+        kname = str(k)
+        imgstr = "images"
+        segstr = "segs"
 
-        #Extract images
+        # Extract images
 
-        if imgstr in kname:   
-            dset=f[kname][:]
-            dims=dset.ndim
+        if imgstr in kname:
+            dset = f[kname][:]
+            dims = dset.ndim
             print("Dims: " + str(dset.shape))
-            content = str("Dims: " + str(dset.shape)+"\n")
+            content = str("Dims: " + str(dset.shape) + "\n")
             ffile.write(content)
 
-            dset1=np.squeeze(dset)
-            dims=dset1.ndim
+            dset1 = np.squeeze(dset)
+            dims = dset1.ndim
 
-            if (dims == 3): #Check: 3 dims for images
+            if dims == 3:  # Check: 3 dims for images
                 row, col, third = dset1.shape
-                for x in range(0,row):
-                    file=kname+str(x)+'.jpg' #also png
+                for x in range(0, row):
+                    file = kname + str(x) + ".jpg"  # also png
+                    file = os.path.join(outpath, file)
 
-                    
-                    data=np.array(dset1[:,:,:][x])
-                    drot90=np.rot90(data,3)
-                    imageio.imwrite(file,drot90)
+                    data = np.array(dset1[:, :, :][x])
+                    imageio.imwrite(file, data)
 
-                    # Can also save image with matplotlib
-                    #matplotlib.image.imsave(file, data)
-
-        #Extract segmentations/labels
+        # Extract segmentations/labels
 
         elif segstr in kname:
-            dset=f[kname][:]
-            dims=dset.ndim
+            dset = f[kname][:]
+            dims = dset.ndim
             print("Dims: " + str(dset.shape))
-            content = str("Dims: " + str(dset.shape)+"\n")
+            content = str("Dims: " + str(dset.shape) + "\n")
             ffile.write(content)
 
-            if (dims == 3): #Check: 3 dims for segs without squeeze
+            if dims == 3:  # Check: 3 dims for segs without squeeze
                 row, col, third = dset.shape
-                for x in range(0,row):
-                    file=kname+str(x)+'.txt'
+                for x in range(0, row):
+                    file = kname + str(x) + ".txt"
 
-                    data=np.array(dset[:,:][x])
-                    
-                    #np.savetxt(file, data,fmt='%s')
+                    data = np.array(dset[:, :][x])
 
-                    segformat= kname+ 'format'+ str(x)+'.txt'
+                    segformat = kname + "format" + str(x) + ".txt"
+                    segformat = os.path.join(outpath, segformat)
                     file1 = open(segformat, "w+")
-    
+
                     # Saving the 2D array in a text file
 
                     content = str(data)
@@ -98,6 +92,7 @@ def main(argv):
                     file1.close()
 
     ffile.close()
+
 
 if __name__ == "__main__":
     main(sys.argv[1:])
