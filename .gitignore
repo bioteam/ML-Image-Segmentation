@@ -4,3 +4,4 @@ construct_hdf5
 construct_hdf5/*
 **/__pycache__
 **/__pycache__/*
+*.json
