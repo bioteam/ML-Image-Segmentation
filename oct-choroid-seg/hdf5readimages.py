@@ -9,23 +9,27 @@ import h5py
 def main(argv):
     infile = ""
     outpath = ""
-    # Example: 'python hdf5readimages.py -i example_data.hdf5 -o /Users/xyz/data/
+    all = 0
+    helpstr = "hdf5readimages.py -i <inputfile> -o <outputpath>\nUse -a to write all non-image content to a text file"
+    # Example: python hdf5readimages.py -i example_data.hdf5 -o /usr/xyz/data/
     try:
-        opts, args = getopt.getopt(argv, "hi:o:", ["ifile=", "opath="])
+        opts, args = getopt.getopt(argv, "hai:o:", ["ifile=", "opath="])
 
         for opt, arg in opts:
             if opt == "-h":
-                print("hdf5readimages.py -i <inputfile> -o <outputpath>")
+                print(helpstr)
                 sys.exit()
+            if opt == "-a":
+                all = 1                
             elif opt in ("-i", "--ifile"):
                 infile = arg
             elif opt in ("-o", "--opah"):
                 outpath = arg
     except getopt.GetoptError:
-        print("hdf5readimages.py -i <inputfile> -o <outputpath>")
+        print(helpstr)
         sys.exit(2)
     if infile == "" or outpath == "":
-        print("hdf5readimages.py -i <inputfile> -o <outputpath>")
+        print(helpstr)
         sys.exit(2)
 
     f = h5py.File(infile, "r")
@@ -42,54 +46,47 @@ def main(argv):
         ffile.write(k + "\n")
         kname = str(k)
         imgstr = "images"
-        segstr = "segs"
 
-        # Extract images
+        dset = f[kname][:]
+        dims = dset.ndim
+        print("Dims: " + str(dset.shape))
+        content = str("Dims: " + str(dset.shape) + "\n")
+        ffile.write(content)
 
-        if imgstr in kname:
-            dset = f[kname][:]
-            dims = dset.ndim
-            print("Dims: " + str(dset.shape))
-            content = str("Dims: " + str(dset.shape) + "\n")
-            ffile.write(content)
-
+        # Assume 4th dimension are RGB channels
+        if dims == 4:
             dset1 = np.squeeze(dset)
             dims = dset1.ndim
 
-            if dims == 3:  # Check: 3 dims for images
-                row, col, third = dset1.shape
-                for x in range(0, row):
+        if dims == 3:  
+            row, col, third = dset1.shape
+            for x in range(0, row):
+                data = np.array(dset1[:, :][x])
+                # Extract images
+
+                if imgstr in kname:
                     file = kname + str(x) + ".jpg"  # also png
                     file = os.path.join(outpath, file)
-
-                    data = np.array(dset1[:, :, :][x])
                     imageio.imwrite(file, data)
 
-        # Extract segmentations/labels
+                # Extract segmentations/labels
 
-        elif segstr in kname:
-            dset = f[kname][:]
-            dims = dset.ndim
-            print("Dims: " + str(dset.shape))
-            content = str("Dims: " + str(dset.shape) + "\n")
-            ffile.write(content)
+                else:
 
-            if dims == 3:  # Check: 3 dims for segs without squeeze
-                row, col, third = dset.shape
-                for x in range(0, row):
-                    file = kname + str(x) + ".txt"
-
-                    data = np.array(dset[:, :][x])
-
-                    segformat = kname + "format" + str(x) + ".txt"
-                    segformat = os.path.join(outpath, segformat)
-                    file1 = open(segformat, "w+")
-
-                    # Saving the 2D array in a text file
-
+                    segfile = kname + "_format" + str(x) + ".txt"
+                    segfile = os.path.join(outpath, segfile)
+                    file1 = open(segfile, "w+")
                     content = str(data)
                     file1.write(content)
                     file1.close()
+
+                    if all == 1:
+                        segfile = kname + "_all" + str(x) + ".txt"
+                        segfile = os.path.join(outpath, segfile)
+                        file1 = open(segfile, "w+")
+
+                        file1.write(','.join(repr(item) for item in data))
+                        file1.close()
 
     ffile.close()
 
