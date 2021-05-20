@@ -20,7 +20,7 @@ def main(argv):
                 print(helpstr)
                 sys.exit()
             if opt == "-a":
-                all = 1                
+                all = 1
             elif opt in ("-i", "--ifile"):
                 infile = arg
             elif opt in ("-o", "--opah"):
@@ -46,47 +46,46 @@ def main(argv):
         ffile.write(k + "\n")
         kname = str(k)
         imgstr = "images"
+        try:
+            dset = f[kname][:]
+        except ValueError:
+            print("Unexpected error reading " + kname + ": HDF5 Dataset may be empty")
+            ffile.write("None\n")
+            continue
 
-        dset = f[kname][:]
         dims = dset.ndim
         print("Dims: " + str(dset.shape))
         content = str("Dims: " + str(dset.shape) + "\n")
         ffile.write(content)
 
-        # Assume 4th dimension are RGB channels
-        if dims == 4:
-            dset1 = np.squeeze(dset)
-            dims = dset1.ndim
+        row = dset.shape[0]
+        for x in range(0, row):
+            data = np.array(dset[:, :][x])
+            # Extract images
 
-        if dims == 3:  
-            row, col, third = dset1.shape
-            for x in range(0, row):
-                data = np.array(dset1[:, :][x])
-                # Extract images
+            if imgstr in kname:
+                file = kname + str(x) + ".jpg"  # also png
+                file = os.path.join(outpath, file)
+                imageio.imwrite(file, data)
 
-                if imgstr in kname:
-                    file = kname + str(x) + ".jpg"  # also png
-                    file = os.path.join(outpath, file)
-                    imageio.imwrite(file, data)
+            # Extract segmentations/labels
 
-                # Extract segmentations/labels
+            else:
 
-                else:
+                segfile = kname + "_format" + str(x) + ".txt"
+                segfile = os.path.join(outpath, segfile)
+                file1 = open(segfile, "w+")
+                content = str(data)
+                file1.write(content)
+                file1.close()
 
-                    segfile = kname + "_format" + str(x) + ".txt"
+                if all == 1:
+                    segfile = kname + "_all" + str(x) + ".txt"
                     segfile = os.path.join(outpath, segfile)
                     file1 = open(segfile, "w+")
-                    content = str(data)
-                    file1.write(content)
+
+                    file1.write(",".join(repr(item) for item in data))
                     file1.close()
-
-                    if all == 1:
-                        segfile = kname + "_all" + str(x) + ".txt"
-                        segfile = os.path.join(outpath, segfile)
-                        file1 = open(segfile, "w+")
-
-                        file1.write(','.join(repr(item) for item in data))
-                        file1.close()
 
     ffile.close()
 
