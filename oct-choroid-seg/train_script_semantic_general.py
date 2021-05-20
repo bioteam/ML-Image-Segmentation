@@ -1,4 +1,5 @@
 import training
+import readdirimages
 import training_parameters as tparams
 import keras.optimizers
 import image_database as imdb
@@ -12,13 +13,14 @@ import h5py
 
 keras.backend.set_image_data_format('channels_last')
 
+BIOTEAM = 0
 INPUT_CHANNELS = 1
 DATASET_NAME = "exampledata"     # can choose a name if desired
 DATASET_FILE = h5py.File("example_data.hdf5", 'r')
 
 # images numpy array should be of the shape: (number of images, image width, image height, 1)
-# segs numpy array should be of the shape: (number of images, number of boundaries, image width)
-
+# if BIOTEAM == 0: segs numpy array should be of the shape: (number of images, number of boundaries, image width)
+# if BIOTEAM == 1: segs numpy array should be of the shape: (number of images, image width, image height)
 
 # fill in this function to load your data for the training set with format/shape given above
 def load_training_data():
@@ -37,13 +39,30 @@ def load_validation_data():
     return val_images, val_segs
 
 
-train_images, train_segs = load_training_data()
-val_images, val_segs = load_validation_data()
+if BIOTEAM == 1:
+    #Bioteam reads from a directory
+    val_images, val_segs, train_images, train_segs, test_images, test_segs = readdirimages.load_all_data()
 
-train_labels = dataset_construction.create_all_area_masks(train_images, train_segs)
-val_labels = dataset_construction.create_all_area_masks(val_images, val_segs)
+else:
+    # Kugelman et al 2019 read from an hdf5 file:
+    train_images, train_segs = load_training_data()
+    val_images, val_segs = load_validation_data()
 
-NUM_CLASSES = train_segs.shape[1] + 1
+
+
+
+if BIOTEAM == 1:
+    # Bioteam labels are areas stored as png files
+    train_labels = readdirimages.create_all_area_masks(train_segs)
+    val_labels = readdirimages.create_all_area_masks(val_segs)
+    NUM_CLASSES = 4    
+else:
+    # Kugelman et al 2019 need to convert boundaries to areas:
+    train_labels = dataset_construction.create_all_area_masks(train_images, train_segs)
+    val_labels = dataset_construction.create_all_area_masks(val_images, val_segs)
+
+    NUM_CLASSES = train_segs.shape[1] + 1
+
 
 train_labels = to_categorical(train_labels, NUM_CLASSES)
 val_labels = to_categorical(val_labels, NUM_CLASSES)
