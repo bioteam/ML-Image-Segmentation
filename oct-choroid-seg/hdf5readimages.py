@@ -11,7 +11,7 @@ def main(argv):
     outpath = ""
     all = 0
     helpstr = "hdf5readimages.py -i <inputfile> -o <outputpath>\nUse -a to write all non-image content to a text file"
-    # Example: python hdf5readimages.py -i example_data.hdf5 -o /usr/xyz/data/
+    # Example: python hdf5readimages.py -i example_data.hdf5 -o .
     try:
         opts, args = getopt.getopt(argv, "hai:o:", ["ifile=", "opath="])
 
@@ -23,7 +23,7 @@ def main(argv):
                 all = 1
             elif opt in ("-i", "--ifile"):
                 infile = arg
-            elif opt in ("-o", "--opah"):
+            elif opt in ("-o", "--opath"):
                 outpath = arg
     except getopt.GetoptError:
         print(helpstr)
