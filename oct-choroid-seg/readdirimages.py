@@ -2,7 +2,7 @@ import numpy as np
 import h5py
 import os
 import parameters
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, ImageDraw
 
 # images numpy array should be of the shape: (number of images, image width, image height, 1)
 # segs numpy array should be of the shape: (number of images, number of boundaries, image width)
@@ -44,6 +44,13 @@ def reshape(images, description, h5filename, channels):
     h5dataset = addhdf5_dataset(dataset, description, h5filename)
     return h5dataset
 
+# Black out areas with scanner name and legend
+def black_out(im):
+
+    draw = ImageDraw.Draw(im)
+    draw.rectangle((0, 0, 100, 496), fill=0)
+    draw.rectangle((1400, 400, 1536, 496), fill=0)
+    return im
 
 # Change greyscale values to 1,2,3, ... values
 def mask_categorical(dset1):
@@ -93,7 +100,7 @@ def load_all_data():
             for subitem in inputs:
                 if not subitem.name.startswith("."):
                     dset1 = np.rot90(
-                        np.array(ImageOps.grayscale(Image.open(subitem.path)))
+                        np.array(ImageOps.grayscale(black_out(Image.open(subitem.path))))
                     )
                     if iswrongshapetype(dset1, x, y):
                         print(
