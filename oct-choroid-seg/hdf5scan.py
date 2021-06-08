@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import sys
+import os
 import getopt
 import numpy as np
 import h5py
@@ -23,28 +24,31 @@ def scan_hdf52(path, recursive=True, tab_step=2):
 def main(argv):
     infile = ""
     outfile = ""
-    # Example: Run with 'python hdf5scan.py -i model_epoch858.hdf5 -o hdf5-scan.txt'
+    outpath = ""
+    cmdhelpstr = "hdf5scan.py -i <inputfile> -o <outputpath>"
+    # Example: Run with 'python hdf5scan.py -i model_epoch858.hdf5 -o .'
     try:
-        opts, args = getopt.getopt(argv, "hi:o:", ["ifile=", "ofile="])
+        opts, args = getopt.getopt(argv, "hi:o:", ["ifile=", "opath="])
 
         for opt, arg in opts:
             if opt == "-h":
-                print("hdf5scan.py -i <inputfile> -o <outputfile>")
+                print(cmdhelpstr)
                 sys.exit()
             elif opt in ("-i", "--ifile"):
                 infile = arg
             elif opt in ("-o", "--ofile"):
-                outfile = arg
+                outpath = arg
     except getopt.GetoptError:
-        print("hdf5scan.py -i <inputfile> -o <outputfile>")
+        print(cmdhelpstr)
         sys.exit(2)
-    if infile == "" or outfile == "":
-        print("hdf5scan.py -i <inputfile> -o <outputfile>")
+    if infile == "" or outpath == "":
+        print(cmdhelpstr)
         sys.exit(2)
 
     # write hdf5 contents to file
     elems = scan_hdf52(infile, True, 2)
 
+    outfile = os.path.join(outpath, "out.txt")
     ffile = open(outfile, "w+")
 
     for e in elems:
@@ -58,8 +62,10 @@ def main(argv):
     keys = list(f.keys())
 
     for k in keys:
+        filename = os.path.join(outpath, str(k) + ".txt")
         n1 = f.get(k)
         n1 = np.array(n1)
+        np.savetxt(filename, n1, fmt='%s')
         print("Keys: " + str(k) + ", Dims: " + str(n1.shape))
 
 
