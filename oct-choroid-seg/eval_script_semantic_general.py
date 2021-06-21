@@ -1,4 +1,5 @@
 import eval_helper
+import readdirimages
 import save_parameters
 import augmentation as aug
 import custom_losses
@@ -10,6 +11,7 @@ import parameters
 from keras.utils import to_categorical
 import h5py
 
+BIOTEAM = 0
 TEST_DATA_NAME = "mytestdata"   # can choose a name if desired
 DATASET_FILE = h5py.File("example_data.hdf5", 'r')
 
@@ -29,6 +31,24 @@ def load_testing_data():
     test_image_names = ['image_1', 'image_2', 'image_3']
 
     return test_images, test_segs, test_image_names
+
+if BIOTEAM == 1:
+    #Bioteam reads from a directory
+     test_images, test_segs, test_image_names = readdirimages.load_all_data()
+
+else:
+    # Kugelman et al 2019 read from an hdf5 file:
+    test_images, test_segs = load_testing_data()
+    
+if BIOTEAM == 1:
+    # Bioteam labels are areas stored as png files
+    test_labels = readdirimages.create_all_area_masks(test_segs)
+    NUM_CLASSES = 4    
+else:
+    # Kugelman et al 2019 need to convert boundaries to areas:
+    test_labels = dataset_construction.create_all_area_masks(test_images, test_segs, test_image_names)
+
+    NUM_CLASSES = test_segs.shape[1] + 1
 
 
 test_images, test_segs, test_image_names = load_testing_data()
