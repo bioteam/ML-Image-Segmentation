@@ -23,8 +23,8 @@ Extract images and segmentation files from example_data.hdf5 with `hdf5readimage
 
 For a quick test use `epochs = 100` in train_script_semantic_general.py instead of 10000
 
-1. Create `results` directory at same level of .git  
-2. Add the path to file `parameters.py`
+1. Create `results` and `data` directories at same level of .git  
+2. Add the paths to file `parameters.py` (Example: DATA_LOCATION = '/Users/user1/git/ML-Image-Segmentation/data/')
 3. Install a conda environment with
 
 `conda env create --name ml_env --file environment.yml`
