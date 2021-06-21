@@ -14,15 +14,10 @@ If the code and methods here are useful to you and aided in your research, pleas
 * numpy
 
 # BioTeam Github Guidance
-## Create hdf5 file 
-
-1. Directory `data` is used in dataset_construction.py to build a hdf5 file
-2. Create `data` directory at same level of .git 
-3. Add the `data` path to DATA_LOCATION parameter in file `parameters.py`
 
 ## Inspect example_data.hdf5
-Extract images and segmentation files from example_data.hdf5 with:
-`python hdf52images.py`
+
+Extract images and segmentation files from example_data.hdf5 with `hdf5readimages.py`
 
 ## Run with example_data.hdf5
 
@@ -38,14 +33,28 @@ For a quick test use `epochs = 100` in train_script_semantic_general.py instead 
 
 `python train_script_semantic_general.py`
 
-## .gitignore
- `data`, `results`, and `__pycache__` were added to .gitignore
+### What to expect
 
-## What to expect
 * During training, the dice_coef (Dice Coefficient) increases as tensorflow converges on a better model
 * The results directory has one `config.hdf5` file and several hdf5 files asigned to  an `epoch` number 
-* To read one hdf5 file from the `results` directory, run `hdf5scan.py`
+* To read any hdf5 file from the `results` directory, run `hdf5scan.py`
 
+## BioTeam version: Train by reading images from a directory
+
+1. Create `INPUT_LOCATION` directory at same level of .git with sub-directories 
+   with expected names train_images, train_segs, val_images, val_segs, test_images, test_segs
+2. Copy the files in the corresponding directories. __A minimum of 3 train and val files is required for training__
+3. Add the `INPUT_LOCATION` path to file `parameters.py`
+4. Set BIOTEAM constant  = 1 in train_script_semantic_general.py and save the file
+5. As before activate the conda environment with `conda activate ml_env` and run 
+
+`python train_script_semantic_general.py`
+
+### What to expect
+1. readdirimages.py will create an hdf5 file `img_data.hdf5` with the images and segs files in the same format as the `example_data.hdf5`
+2. `img_data.hdf5` can be read with `hdf5readimages.py`
+3. `img_data.hdf5` cannot be used as input to the original Kugelman et al code (BIOTEAM = 0) because it contains areas, not boundaries
+4. Al other files and results are in the same format as before
 
 # Training a model (patch-based)
 1. Modify *load_training_data* and *load_validation_data* functions in *train_script_patchbased_general.py* to load your training and validation data (see comments in code). [see example data file and load functions]
