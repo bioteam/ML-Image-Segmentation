@@ -77,7 +77,7 @@ opt_con = keras.optimizers.Adam
 opt_params = {}     # default params
 loss = custom_losses.dice_loss
 metric = custom_metrics.dice_coef
-epochs = 10000
+epochs = 1000
 batch_size = 3
 
 aug_fn_args = [(aug.no_aug, {}), (aug.flip_aug, {'flip_type': 'left-right'})]

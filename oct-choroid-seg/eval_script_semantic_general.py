@@ -38,7 +38,8 @@ if BIOTEAM == 1:
 
 else:
     # Kugelman et al 2019 read from an hdf5 file:
-    test_images, test_segs = load_testing_data()
+    test_images, test_segs, test_image_names = load_testing_data()
+    
     
 if BIOTEAM == 1:
     # Bioteam labels are areas stored as png files
@@ -46,7 +47,7 @@ if BIOTEAM == 1:
     NUM_CLASSES = 4    
 else:
     # Kugelman et al 2019 need to convert boundaries to areas:
-    test_labels = dataset_construction.create_all_area_masks(test_images, test_segs, test_image_names)
+    test_labels = dataset_construction.create_all_area_masks(test_images, test_segs)
 
     NUM_CLASSES = test_segs.shape[1] + 1
 
