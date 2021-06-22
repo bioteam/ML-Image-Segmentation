@@ -10,10 +10,10 @@ import dataset_construction
 from keras.utils import to_categorical
 import augmentation as aug
 import h5py
+import parameters
 
 keras.backend.set_image_data_format('channels_last')
 
-BIOTEAM = 0
 INPUT_CHANNELS = 1
 DATASET_NAME = "exampledata"     # can choose a name if desired
 DATASET_FILE = h5py.File("example_data.hdf5", 'r')
@@ -38,7 +38,7 @@ def load_validation_data():
 
     return val_images, val_segs
 
-if BIOTEAM == 1:
+if parameters.BIOTEAM == 1:
     #Bioteam reads from a directory
     val_images, val_segs, train_images, train_segs, test_images, test_segs = readdirimages.load_all_data()
 
@@ -47,7 +47,7 @@ else:
     train_images, train_segs = load_training_data()
     val_images, val_segs = load_validation_data()
 
-if BIOTEAM == 1:
+if parameters.BIOTEAM == 1:
     # Bioteam labels are areas stored as png files
     train_labels = readdirimages.create_all_area_masks(train_segs)
     val_labels = readdirimages.create_all_area_masks(val_segs)
@@ -77,7 +77,7 @@ opt_con = keras.optimizers.Adam
 opt_params = {}     # default params
 loss = custom_losses.dice_loss
 metric = custom_metrics.dice_coef
-epochs = 1000
+epochs = parameters.EPOCHS
 batch_size = 3
 
 aug_fn_args = [(aug.no_aug, {}), (aug.flip_aug, {'flip_type': 'left-right'})]

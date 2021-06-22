@@ -73,8 +73,8 @@ eval_imdb = imdb.ImageDatabase(images=test_images, labels=test_labels, segs=test
                                boundary_names=BOUNDARY_NAMES, area_names=AREA_NAMES,
                                fullsize_class_names=AREA_NAMES, num_classes=NUM_CLASSES, name=TEST_DATA_NAME, filename=TEST_DATA_NAME, mode_type='fullsize')
 
-network_folder = parameters.RESULTS_LOCATION + "\\2021-04-21 12_28_48 U-net exampledata\\" # name of network folder for which to evaluate model
-model_name = "model_epoch635.hdf5"   # name of model file inside network folder to evaluate
+network_folder = parameters.RESULTS_LOCATION + parameters.MODEL_LOCATION # name of network folder for which to evaluate model
+model_name = parameters.MODEL_NAME   # name of model file inside network folder to evaluate
 
 loaded_model = load_model(network_folder + "/" + model_name, custom_objects=CUSTOM_OBJECTS)
 
