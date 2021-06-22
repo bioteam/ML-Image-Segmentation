@@ -7,3 +7,4 @@ construct_hdf5/*
 *.json
 oct-choroid-seg/training.pyc
 *.hdf5
+*.pyc
