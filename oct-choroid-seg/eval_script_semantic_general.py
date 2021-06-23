@@ -1,13 +1,14 @@
-import eval_helper
-import readdirimages
-import save_parameters
 import augmentation as aug
 import custom_losses
 import custom_metrics
-from keras.models import load_model
-import image_database as imdb
 import dataset_construction
+import eval_helper
+import image_database as imdb
 import parameters
+import readdirimages
+import save_parameters
+
+from keras.models import load_model
 from keras.utils import to_categorical
 import h5py
 

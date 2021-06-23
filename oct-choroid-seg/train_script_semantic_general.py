@@ -1,16 +1,17 @@
-import training
-import readdirimages
-import training_parameters as tparams
-import keras.optimizers
-import image_database as imdb
-import semantic_network_models as sem_models
+import augmentation as aug
 import custom_losses
 import custom_metrics
 import dataset_construction
-from keras.utils import to_categorical
-import augmentation as aug
-import h5py
+import image_database as imdb
 import parameters
+import readdirimages
+import semantic_network_models as sem_models
+import training
+import training_parameters as tparams
+
+from keras.utils import to_categorical
+import h5py
+import keras.optimizers
 
 keras.backend.set_image_data_format('channels_last')
 
