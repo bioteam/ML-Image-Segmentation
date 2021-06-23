@@ -86,6 +86,7 @@ def load_all_data():
     train_segs = []
     test_images = []
     test_segs = []
+    test_names = []
     h5filename = "img_data.hdf5"
     x = 0
     y = 0
@@ -125,6 +126,7 @@ def load_all_data():
 
                     elif item.name == "test_images":
                         test_images.append(dset1)
+                        test_names.append(os.path.splitext(subitem.name)[0])
 
                     elif item.name == "test_segs":
                         dset1 = mask_categorical(dset1)
@@ -146,6 +148,7 @@ def load_all_data():
         h5train_segs,
         h5test_images,
         h5test_segs,
+        test_names,
     )
 
 # When segs contains area labels, just copy over, and add 4th dim for RGB channels  

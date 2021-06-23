@@ -34,12 +34,11 @@ def load_testing_data():
 
 if parameters.BIOTEAM == 1:
     #Bioteam reads from a directory
-    test_images, test_segs, test_image_names = readdirimages.load_all_data()
+    _, _, _, _, test_images, test_segs, test_names = readdirimages.load_all_data()
 
 else:
     # Kugelman et al 2019 read from an hdf5 file:
     test_images, test_segs, test_image_names = load_testing_data()
-    
     
 if parameters.BIOTEAM == 1:
     # Bioteam labels are areas stored as png files
@@ -52,7 +51,8 @@ else:
     NUM_CLASSES = test_segs.shape[1] + 1
 
 
-test_images, test_segs, test_image_names = load_testing_data()
+# Should this be here?
+# test_images, test_segs, test_image_names = load_testing_data()
 
 test_labels = dataset_construction.create_all_area_masks(test_images, test_segs)
 

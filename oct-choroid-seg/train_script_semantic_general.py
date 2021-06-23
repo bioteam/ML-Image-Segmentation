@@ -41,7 +41,7 @@ def load_validation_data():
 
 if parameters.BIOTEAM == 1:
     #Bioteam reads from a directory
-    val_images, val_segs, train_images, train_segs, test_images, test_segs = readdirimages.load_all_data()
+    val_images, val_segs, train_images, train_segs, test_images, test_segs, _ = readdirimages.load_all_data()
 
 else:
     # Kugelman et al 2019 read from an hdf5 file:
