@@ -34,7 +34,7 @@ def load_testing_data():
 
 if parameters.BIOTEAM == 1:
     #Bioteam reads from a directory
-    _, _, _, _, test_images, test_segs, test_names = readdirimages.load_all_data()
+    _, _, _, _, test_images, test_segs, test_image_names = readdirimages.load_all_data()
 
 else:
     # Kugelman et al 2019 read from an hdf5 file:
@@ -50,13 +50,6 @@ else:
 
     NUM_CLASSES = test_segs.shape[1] + 1
 
-
-# Should this be here?
-# test_images, test_segs, test_image_names = load_testing_data()
-
-test_labels = dataset_construction.create_all_area_masks(test_images, test_segs)
-
-NUM_CLASSES = test_segs.shape[1] + 1
 
 test_labels = to_categorical(test_labels, NUM_CLASSES)
 
@@ -82,5 +75,5 @@ aug_fn_arg = (aug.no_aug, {})
 
 eval_helper.evaluate_network(eval_imdb, model_name, network_folder,
                              BATCH_SIZE, save_parameters.SaveParameters(pngimages=True, raw_image=True, raw_labels=True, temp_extra=True, boundary_maps=True, area_maps=True, comb_area_maps=True, seg_plot=True),
-                             gsgrad=GSGRAD, aug_fn_arg=aug_fn_arg, eval_mode='both', boundaries=True, boundary_errors=True, dice_errors=True, col_error_range=None, normalise_input=True, transpose=False)
+                             gsgrad=GSGRAD, aug_fn_arg=aug_fn_arg, eval_mode='both', boundaries=False, boundary_errors=True, dice_errors=True, col_error_range=None, normalise_input=True, transpose=False)
 
