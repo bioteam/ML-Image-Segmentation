@@ -21,27 +21,28 @@ Extract images and segmentation files from example_data.hdf5 with `hdf5readimage
 
 ## Run with example_data.hdf5
 
-For a quick test use `epochs = 100` in train_script_semantic_general.py instead of 10000
-
-1. Create `results` and `data` directories at the root level directory of
+1. For a quick test, set `EPOCHS = 100` in `parameters.py`.
+2. Create `results` and `data` directories at the root level directory of
    this repository.  
-2. In `parameters.py`, update the `RESULTS_LOCATION` and `DATA_LOCATION` to
-   match the paths of the two newly created directories. (Example:
-   `DATA_LOCATION = '/Users/user1/git/ML-Image-Segmentation/data/'`)
-3. Install a conda environment with
+3. In `parameters.py`, update the `RESULTS_LOCATION` and `DATA_LOCATION` to
+   match the paths of the two newly created directories. Examples:
+   * `DATA_LOCATION = '/Users/user1/git/ML-Image-Segmentation/data/'`
+   * `RESULTS_LOCATION = '/Users/user1/git/ML-Image-Segmentation/results/'`
+4. Set `BIOTEAM = 0` in `parameters.py` and save the file.
+5. Install a conda environment and all the necessary dependecies by running:
 
 `conda env create --name ml_env --file environment.yml`
 
-4. Activate the conda environment with `conda activate ml_env` 
+6. Activate the conda environment with `conda activate ml_env` 
 
-5. Run `python train_script_semantic_general.py`
+7. Run `python train_script_semantic_general.py`
 
 ### What to expect
 
 * During training, the dice_coef (Dice Coefficient) increases as tensorflow
   converges on a better model
 * The results directory has one `config.hdf5` file and several hdf5 files
-  asigned to  an `epoch` number 
+  asigned to an `epoch` number 
 * To read any hdf5 file from the `results` directory, run `hdf5scan.py`
 
 ## BioTeam version: Train by reading images from a directory
@@ -53,11 +54,11 @@ For a quick test use `epochs = 100` in train_script_semantic_general.py instead 
       testing in a directory called `remlmaterials`.
 2. Copy the files into the corresponding directories. __A minimum of 3 train and val files is required for training__
 3. In `parameters.py`, update the `INPUT_LOCATION` to match the directory
-   created in step one.
+   created in step one. (Example: `INPUT_LOCATION =
+   '/Users/user1/git/ML-Image-Segmentation/remlmaterials/'`)
 4. Set `BIOTEAM = 1` in `parameters.py` and save the file.
-5. As before activate the conda environment with `conda activate ml_env` and run 
-
-`python train_script_semantic_general.py`
+5. As before,  activate the conda environment with `conda activate ml_env`.
+6. Run `python train_script_semantic_general.py`
 
 ### What to expect
 1. readdirimages.py will create an hdf5 file `img_data.hdf5` with the images
