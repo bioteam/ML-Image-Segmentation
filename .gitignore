@@ -8,3 +8,4 @@ construct_hdf5/*
 oct-choroid-seg/training.pyc
 *.hdf5
 *.pyc
+.DS_Store
