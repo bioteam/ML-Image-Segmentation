@@ -69,12 +69,15 @@ Extract images and segmentation files from example_data.hdf5 with `hdf5readimage
 4. All other files and results are in the same format as before
 
 # Training a model (patch-based)
-1. Modify *load_training_data* and *load_validation_data* functions in *train_script_patchbased_general.py* to load your training and validation data (see comments in code). [see example data file and load functions]
+1. Modify *load_training_data* and *load_validation_data* functions in
+   *train_script_patchbased_general.py* to load your training and validation
+   data (see comments in code). [see example data file and load functions]
 2. Choose one of the following and pass as first training parameter as shown in code:
     * *model_cifar* (Cifar CNN)
     * *model_complex* (Complex CNN) [default]
     * *model_rnn* (RNN)
-3. Can change the desired patch size (*PATCH_SIZE*) as well as the name of your dataset (*DATASET_NAME*).
+3. Can change the desired patch size (*PATCH_SIZE*) as well as the name of your
+   dataset (*DATASET_NAME*).
 4. Run *train_script_patchbased_general.py*
 5. Training results will be saved in the location defined by *parameters.RESULTS_LOCATION*. Each new training run will be saved in a new seperate folder named with the format: 
 (*TIMESTAMP*) _ (*MODEL_NAME*) _ (*DATASET_NAME*). Each folder will contain the following files:
@@ -99,18 +102,39 @@ Extract images and segmentation files from example_data.hdf5 with `hdf5readimage
     * one or more *model_epoch&.hdf5* files containing the saved model at each epoch &
   
 # Evaluating a model (patch-based)
-1. Modify *load_testing_data* function in *eval_script_patchbased_general.py* to load your testing data (see comments in code). [see example data file and load function]
+1. Modify *load_testing_data* function in *eval_script_patchbased_general.py*
+   to load your testing data (see comments in code). [see example data file and
+   load function]
 2. Specify trained network folder to evaluate.
-3. Specify filename of model to evaluate within the chosen folder: *model_epoch&.hdf5*
+3. Specify filename of model to evaluate within the chosen folder:
+   *model_epoch&.hdf5*
 4. Run *eval_script_patchbased_general.py*
-5. Evaluation results will be saved in a new folder (with the name *no_aug_(DATASET_NAME).hdf5*) within the specified trained network folder. Within this, a folder is created for each evaluated image containing a range of .png images illustrating the results qualitatively as well as an *evaluations.hdf5* file with all quantitative results. A new *config.hdf5* file is created in the new folder as well as *results.hdf5* and *results.csv* files summarising the overall results after all images have been evaluated.
+5. Evaluation results will be saved in a new folder (with the name
+   *no_aug_(DATASET_NAME).hdf5*) within the specified trained network folder.
+   Within this, a folder is created for each evaluated image containing a range
+   of .png images illustrating the results qualitatively as well as an
+   *evaluations.hdf5* file with all quantitative results. A new *config.hdf5*
+   file is created in the new folder as well as *results.hdf5* and
+   *results.csv* files summarising the overall results after all images have
+   been evaluated.
   
 # Evaluating a model (semantic)
-1. Modify *load_testing_data* function in *eval_script_semantic_general.py* to load your testing data (see comments in code). [see example data file and load function]
-2. Specify trained network folder to evaluate.
-3. Specify filename of model to evaluate within the chosen folder: *model_epoch&.hdf5*
+1. Update `MODEL_LOCATION` in `parameters.py` to point to the sub-directory
+   generated during the training within the `results` folder. (Example:
+   `MODEL_LOCATION = '/2021-06-21 17_02_56 U-net exampledata/'`)
+2. Update `MODEL_NAME` in `parameters.py` to point to the largest epoch file
+   generated during the training contained within the `MODEL_LOCATION`
+   sub-directory rreferenced in the previous step. (Example: `MODEL_NAME =
+   'model_epoch100.hdf5'`)
 4. Run *eval_script_semantic_general.py*
-5. Evaluation results will be saved in a new folder (with the name *no_aug_(DATASET_NAME).hdf5*) within the specified trained network folder. Within this, a folder is created for each evaluated image containing a range of .png images illustrating the results qualitatively as well as an *evaluations.hdf5* file with all quantitative results. A new *config.hdf5* file is created in the new folder as well as *results.hdf5* and *results.csv* files summarising the overall results after all images have been evaluated.
+5. Evaluation results will be saved in a new folder (with the name
+   *no_aug_(DATASET_NAME).hdf5*) within the specified trained network folder.
+   Within this, a folder is created for each evaluated image containing a range
+   of .png images illustrating the results qualitatively as well as an
+   *evaluations.hdf5* file with all quantitative results. A new *config.hdf5*
+   file is created in the new folder as well as *results.hdf5* and
+   *results.csv* files summarising the overall results after all images have
+   been evaluated.
 
 # Still to be added
 * *RNN bottleneck* and *Combined* semantic network models
