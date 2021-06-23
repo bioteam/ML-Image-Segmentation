@@ -11,7 +11,6 @@ import parameters
 from keras.utils import to_categorical
 import h5py
 
-BIOTEAM = 0
 TEST_DATA_NAME = "mytestdata"   # can choose a name if desired
 DATASET_FILE = h5py.File("example_data.hdf5", 'r')
 
@@ -32,16 +31,16 @@ def load_testing_data():
 
     return test_images, test_segs, test_image_names
 
-if BIOTEAM == 1:
+if parameters.BIOTEAM == 1:
     #Bioteam reads from a directory
-     test_images, test_segs, test_image_names = readdirimages.load_all_data()
+    test_images, test_segs, test_image_names = readdirimages.load_all_data()
 
 else:
     # Kugelman et al 2019 read from an hdf5 file:
     test_images, test_segs, test_image_names = load_testing_data()
     
     
-if BIOTEAM == 1:
+if parameters.BIOTEAM == 1:
     # Bioteam labels are areas stored as png files
     test_labels = readdirimages.create_all_area_masks(test_segs)
     NUM_CLASSES = 4    
