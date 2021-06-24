@@ -12,7 +12,6 @@ from keras.models import load_model
 from keras.utils import to_categorical
 import h5py
 
-TEST_DATA_NAME = "mytestdata"   # can choose a name if desired
 DATASET_FILE = h5py.File("example_data.hdf5", 'r')
 
 # segs are true boundary positions for each image
@@ -64,7 +63,7 @@ CUSTOM_OBJECTS = dict(list(custom_losses.custom_loss_objects.items()) +
 
 eval_imdb = imdb.ImageDatabase(images=test_images, labels=test_labels, segs=test_segs, image_names=test_image_names,
                                boundary_names=BOUNDARY_NAMES, area_names=AREA_NAMES,
-                               fullsize_class_names=AREA_NAMES, num_classes=NUM_CLASSES, name=TEST_DATA_NAME, filename=TEST_DATA_NAME, mode_type='fullsize')
+                               fullsize_class_names=AREA_NAMES, num_classes=NUM_CLASSES, name=parameters.TEST_DATA_NAME, filename=parameters.TEST_DATA_NAME, mode_type='fullsize')
 
 network_folder = parameters.RESULTS_LOCATION + parameters.MODEL_LOCATION # name of network folder for which to evaluate model
 model_name = parameters.MODEL_NAME   # name of model file inside network folder to evaluate

@@ -16,7 +16,6 @@ import keras.optimizers
 keras.backend.set_image_data_format('channels_last')
 
 INPUT_CHANNELS = 1
-DATASET_NAME = "exampledata"     # can choose a name if desired
 DATASET_FILE = h5py.File("example_data.hdf5", 'r')
 
 # images numpy array should be of the shape: (number of images, image width, image height, 1)
@@ -64,8 +63,8 @@ else:
 train_labels = to_categorical(train_labels, NUM_CLASSES)
 val_labels = to_categorical(val_labels, NUM_CLASSES)
 
-train_imdb = imdb.ImageDatabase(images=train_images, labels=train_labels, name=DATASET_NAME, filename=DATASET_NAME, mode_type='fullsize', num_classes=NUM_CLASSES)
-val_imdb = imdb.ImageDatabase(images=val_images, labels=val_labels, name=DATASET_NAME, filename=DATASET_NAME, mode_type='fullsize', num_classes=NUM_CLASSES)
+train_imdb = imdb.ImageDatabase(images=train_images, labels=train_labels, name=parameters.DATASET_NAME, filename=parameters.DATASET_NAME, mode_type='fullsize', num_classes=NUM_CLASSES)
+val_imdb = imdb.ImageDatabase(images=val_images, labels=val_labels, name=parameters.DATASET_NAME, filename=parameters.DATASET_NAME, mode_type='fullsize', num_classes=NUM_CLASSES)
 
 # models from the "Automatic choroidal segmentation in OCT images using supervised deep learning methods" paper (currently excluding RNN bottleneck and Combined)
 model_residual = sem_models.resnet(8, 4, 2, 1, (3, 3), (2, 2), input_channels=INPUT_CHANNELS, output_channels=NUM_CLASSES)
