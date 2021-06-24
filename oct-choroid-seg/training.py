@@ -147,16 +147,16 @@ def train_network(train_imdb, val_imdb, train_params):
         dataset_name = train_imdb.name
 
         timestamp = common.get_timestamp()
-        save_foldername = parameters.RESULTS_LOCATION + timestamp + " " + model_name_short + " " + dataset_name
+        save_foldername = parameters.RESULTS_LOCATION + timestamp + "_" + model_name_short + "_" + dataset_name
 
         if not os.path.exists(save_foldername):
             os.makedirs(save_foldername)
         else:
             count = 2
-            testsave_foldername = parameters.RESULTS_LOCATION + timestamp + " " + str(count) + " " + model_name_short + " " + dataset_name
+            testsave_foldername = parameters.RESULTS_LOCATION + timestamp + "_" + str(count) + "_" + model_name_short + "_" + dataset_name
             while os.path.exists(testsave_foldername):
                 count += 1
-                testsave_foldername = parameters.RESULTS_LOCATION + timestamp + " " + str(count) + " " + model_name_short + " " + dataset_name
+                testsave_foldername = parameters.RESULTS_LOCATION + timestamp + "_" + str(count) + "_" + model_name_short + "_" + dataset_name
 
             save_foldername = testsave_foldername
             os.makedirs(save_foldername)
