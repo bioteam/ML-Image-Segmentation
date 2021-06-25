@@ -44,6 +44,7 @@ def reshape(images, description, h5filename, channels):
     h5dataset = addhdf5_dataset(dataset, description, h5filename)
     return h5dataset
 
+
 # Black out areas with scanner name and legend
 def black_out(im):
 
@@ -51,6 +52,7 @@ def black_out(im):
     draw.rectangle((0, 0, 100, 496), fill=0)
     draw.rectangle((1400, 400, 1536, 496), fill=0)
     return im
+
 
 # Change greyscale values to 1,2,3, ... values
 def mask_categorical(dset1):
@@ -60,7 +62,7 @@ def mask_categorical(dset1):
     for i in range(len(uniques)):
         x = uniques[i]
         dset1 = np.where(dset1 == x, i, dset1)
-     
+
     return dset1
 
 
@@ -101,7 +103,9 @@ def load_all_data():
             for subitem in inputs:
                 if not subitem.name.startswith("."):
                     dset1 = np.rot90(
-                        np.array(ImageOps.grayscale(black_out(Image.open(subitem.path))))
+                        np.array(
+                            ImageOps.grayscale(black_out(Image.open(subitem.path)))
+                        )
                     )
                     if iswrongshapetype(dset1, x, y):
                         print(
@@ -140,7 +144,6 @@ def load_all_data():
     h5test_images = reshape(test_images, "test_images", h5filename, 1)
     h5test_segs = addhdf5_dataset(np.asarray(test_segs), "test_segs", h5filename)
 
-
     return (
         h5val_images,
         h5val_segs,
@@ -151,7 +154,8 @@ def load_all_data():
         test_names,
     )
 
-# When segs contains area labels, just copy over, and add 4th dim for RGB channels  
+
+# When segs contains area labels, just copy over, and add 4th dim for RGB channels
 def create_all_area_masks(segs):
 
     all_masks = channels_last_reshape(segs, 1)
@@ -159,8 +163,7 @@ def create_all_area_masks(segs):
 
     return all_masks
 
+
 # test load_all_data()
 # val_images, val_segs, train_images, train_segs, test_images, test_segs = load_all_data()
 # train_labels=create_all_area_masks(train_segs)
-
-    

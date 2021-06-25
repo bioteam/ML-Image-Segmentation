@@ -65,7 +65,7 @@ def main(argv):
         filename = os.path.join(outpath, str(k) + ".txt")
         n1 = f.get(k)
         n1 = np.array(n1)
-        np.savetxt(filename, n1, fmt='%s')
+        np.savetxt(filename, n1, fmt="%s")
         print("Keys: " + str(k) + ", Dims: " + str(n1.shape))
 
 
