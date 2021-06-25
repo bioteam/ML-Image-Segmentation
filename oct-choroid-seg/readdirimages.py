@@ -49,8 +49,8 @@ def reshape(images, description, h5filename, channels):
 def black_out(im):
 
     draw = ImageDraw.Draw(im)
-    draw.rectangle((0, 0, 100, 496), fill=0)
-    draw.rectangle((1400, 400, 1536, 496), fill=0)
+    draw.rectangle(parameters.BLACKOUT_COORDS_LEFT, fill=0)
+    draw.rectangle(parameters.BLACKOUT_COORDS_RIGHT, fill=0)
     return im
 
 
