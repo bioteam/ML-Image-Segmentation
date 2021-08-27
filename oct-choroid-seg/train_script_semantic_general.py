@@ -9,12 +9,27 @@ import dataset_construction
 from keras.utils import to_categorical
 import augmentation as aug
 import h5py
+import numpy as np
+import sys
+np.set_printoptions(threshold=sys.maxsize)
+from PIL import Image as im
 
 keras.backend.set_image_data_format('channels_last')
 
 INPUT_CHANNELS = 1
 DATASET_NAME = "exampledata"     # can choose a name if desired
 DATASET_FILE = h5py.File("example_data.hdf5", 'r')
+
+def map_colors(a):
+    return a*255//4
+
+def print_mask_image(image):
+    image = np.squeeze(image)
+    vfunc = np.vectorize(map_colors)
+    image = vfunc(image)
+    print(image)
+    data = im.fromarray(image.astype(np.uint8))
+    data.save('training_label.png')
 
 # images numpy array should be of the shape: (number of images, image width, image height, 1)
 # segs numpy array should be of the shape: (number of images, number of boundaries, image width)
@@ -40,13 +55,29 @@ def load_validation_data():
 train_images, train_segs = load_training_data()
 val_images, val_segs = load_validation_data()
 
+print("Train Images")
+print(type(train_images))
+print(np.shape(train_images))
+print("Train Segments")
+print(type(train_segs))
+print(np.shape(train_segs))
+
 train_labels = dataset_construction.create_all_area_masks(train_images, train_segs)
 val_labels = dataset_construction.create_all_area_masks(val_images, val_segs)
+
+print("Train Labels")
+print(type(train_labels))
+print(np.shape(train_labels))
+
+print_mask_image(train_labels[0])
 
 NUM_CLASSES = train_segs.shape[1] + 1
 
 train_labels = to_categorical(train_labels, NUM_CLASSES)
 val_labels = to_categorical(val_labels, NUM_CLASSES)
+
+exit(0)
+
 
 train_imdb = imdb.ImageDatabase(images=train_images, labels=train_labels, name=DATASET_NAME, filename=DATASET_NAME, mode_type='fullsize', num_classes=NUM_CLASSES)
 val_imdb = imdb.ImageDatabase(images=val_images, labels=val_labels, name=DATASET_NAME, filename=DATASET_NAME, mode_type='fullsize', num_classes=NUM_CLASSES)
